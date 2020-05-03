@@ -5,42 +5,50 @@ import sys
 
 def login():
     # you need to read it only once, not every loop
-    users = open('users.txt').read().split('\n')
-    for i in range(len(users)): users[i] = users[i].split('|')
-
-    # Now what you want is to loop infinitely
-    # until you get correct username/password
-    # instead of recursive calling this
-    # function over and over again
+    
+    # users = open('users.txt').read().split('\n')
+    # for i in range(len(users)): users[i] = users[i].split('|')
 
     while True:
         print('Welcome to the Password Manager')
         # clear the screen
-        os.system('clear')
+        # os.system('clear')
+
+        # make it simple
+        uname = 'abhishek'
+        pswrd = 'abhi'
 
         username = str(input('Username: '))
         password = str(input('Password: '))
-    
-        for user in users:
-            # uname = user[0]
-            # pword = user[1]
-            
-            # here we search a user through SEARCH tech.
-            # ....
-            uname = ''.join(user[0].split())
-            pword = ''.join(user[1].split())
-            
-            if uname == username and pword == password:
-                print('Hello ' + user[1] + '.')
-                print('You are logged in as: ' + user[0] + '.')
-                # return to the main_menu()
-                return main_menu()
 
-            else:
-                # if none of the records mathched the input
-                print('\n\tWrong Username or Password...!')
-                print('\tTry again...\n')
-                return False 
+        # simple condition for the login 
+        if username is uname and password is pswrd:
+            print('Hello ' + username + '.')
+            # call the main_menu function
+            return main_menu()
+        else:
+                
+'''
+        # for user in users:
+        #     for _ in range(len(user)):
+        #         if user[0] == username:
+        #             uname = ''.join(user[0].split())
+        #             pswrd = ''.join(user[1].split())
+        #             print(uname, pswrd)
+        #             if uname == username and pswrd == password:
+        #                 print('Hello ' + user[1] + '.')
+        #                 print('You are logged in as: ' + user[0] + '.')
+        #                     # return to the main_menu()
+        #                 return main_menu()
+        #             else:
+        #                 print('something happend')
+        #         else:
+        #             # if none of the records mathched the input
+        #             print('\n\tWrong Username or Password...!')
+        #             print('\tTry again...\n')
+        #             return False 
+'''
+
 
 def main_menu():
     # trying to clear the screen
