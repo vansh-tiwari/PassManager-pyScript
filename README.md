@@ -51,7 +51,7 @@ python PassManager.py
 + Kali Linux - ROLLING
 
 ### Screenshot:
-![Shot](https://github.com/abhishekpatel946/PassManager/master/Screens/*.png)
+![Shot](https://github.com/abhishekpatel946/PassManager/master/Screens/Option-menu.png)
 
 More in [Screens](Screens)
 
