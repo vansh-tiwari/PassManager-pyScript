@@ -7,6 +7,11 @@
 import os
 import sys
 import time
+import getpass
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
+from cryptography.fernet import Fernet
+
 BLUE, RED, WHITE, YELLOW, MEGENTA, GREEN, END = ['\33[94m', '\033[91m', '\33[97m', '\33[93m', '\033[1;35m', '\033[1;32m', '\033[0m']
 
 # run as a root
@@ -16,36 +21,6 @@ if not os.geteuid() == 0:
 # Clear
 def clear():
     os.system('clear')
-
-# ***
-def begin():
-    os.system('sudo rm -Rf dist')
-
-    email = input('Type your gmail to reciece logs: ')
-    epass = input('Type your gmail password: ')
-    print('\n')
-    print('[ * * * * * * * * * * * * * * * * * * * * * * * * * ]')
-    print('\n   email: ' + email)
-    print(' password: ' + epass)
-    print('\n[ * * * * * * * * * * * * * * * * * * * * * * * * * ]')
-    print('\n')
-    ask = input('These info above are correct? (y/n) :')
-    if ask == 'y' or ask == 'Y':
-        pass
-    else:
-        begin()
-    
-    template = open('Template/PassManager.py', 'r')
-    o = template.read()
-    payload = '#/usr/bin/python\n'
-    payload += '# --*-- coding: utf-8 --*--\n'
-    payload += 'EEMAIL = ' + "'" + email + "'" + '\n'
-    payload += 'EPASS = ' + "'" + epass + "'" +'\n'
-    payload += str(o)
-    with open('k.py', 'w') as f:
-        f.write(payload)
-        f.close()
-    template.close()
 
 # Splash Screen
 def warn():
@@ -66,7 +41,7 @@ def warn():
              ##        ##       ($$$$$$)         ''' + RED + '''      [ Disclaimer Alert ] ''' + RED + '''
              ##        ##      ($$(__)$$)        ''' + WHITE + '''  Not Resposible For Misuse ''' + RED + '''
             (+----------+)     ($$$$$$)          ''' + WHITE + '''    or Illegal Purposes. ''' + RED + '''
-            |     __     |     //   /            ''' + WHITE + ''' Use it just for ''' + RED + '''WORK''' + WHITE + ''' or ''' + RED + '''EDUCATIONAL''' + WHITE + ''' ! ''' + RED + '''
+            |     __     |     //   /            ''' + WHITE + ''' Use it just for ''' + RED + '''WORK''' + WHITE + ''' or ''' + RED + '''EDUCATIONAL''' + WHITE + ''' purpose ! ''' + RED + '''
             |    (  )    |    // --/
             |     ||     |   // --/    
             |     ||     |  // __/   
@@ -92,21 +67,14 @@ def heading():
            |     ||     |   // --/      
            |     ||     |  // __/     
            +============+  \__/           version: '''+WHITE+'''1.0'''+YELLOW+'''
-                                           by:''' + WHITE + ' Abhishek Patel (' + YELLOW + 'abhishekpatel946' + WHITE + ')' + '\n' + '\n' + END)    
-    print(' {0}[{1}L{0}]{1} LOGIN'.format(YELLOW, END) + ' {0}[{1}A{0}]{1} ABOUT'.format(YELLOW, END) + ' {0}[{1}C{0}]{1} CREDITS'.format(YELLOW, END) + ' {0}[{1}U{0}]{1} UPDATE'.format(YELLOW, END) + ' {0}[{1}Q{0}]{1} Quit'.format(YELLOW, END) + '\n')                               
-    # print( YELLOW+'''\n\n\n['''+WHITE+ '''L'''+YELLOW+'''] LOGIN''' + END
-    #       + YELLOW+'''\n\n\n['''+WHITE+ '''A'''+YELLOW+'''] ABOUT''' + END 
-    #       + YELLOW+'''\n\n\n['''+WHITE+ '''C'''+YELLOW+'''] CREDITS''' + END 
-    #       + YELLOW+'''\n\n\n['''+WHITE+ '''U'''+YELLOW+'''] UPDATE''' + END  
-    #       + YELLOW+'''\n\n\n['''+WHITE+ '''Q'''+YELLOW+'''] QUIT''' + END  )
-
-
-
+                                          by:''' + WHITE + ' Abhishek Patel (' + YELLOW + 'abhishekpatel946' + WHITE + ')' + '\n' + '\n' + END)    
+    print('\n {0}[{1}L{0}]{1} LOGIN'.format(YELLOW, END) + ' {0}[{1}A{0}]{1} ABOUT'.format(YELLOW, END) + ' {0}[{1}C{0}]{1} CREDITS'.format(YELLOW, END) + ' {0}[{1}U{0}]{1} UPDATE'.format(YELLOW, END) + ' {0}[{1}Q{0}]{1} Quit'.format(YELLOW, END) + '\n')                               
+    
 # last greetings  
 def pp():
     sys.stdout.write('\n\n' + GREEN + ''' Thank You for using PassManager, KEEP CODING; & HACKING :D !!!''' + '\n\n\n' + END)
 
-# about section
+# about section3
 def about():
     clear()
     warn()
@@ -119,7 +87,7 @@ def about():
             PassManager is simple add delete CREDENTIALs easily with my pyScript.
             It's a open source script you can contribute and donate for help. '''
         + BLUE + 
-            ''' https://github.com/abhishekpatel946/ ''' + END + '\n' )
+        '\n\t\t\t' + ''' https://github.com/abhishekpatel946/ ''' + END + '\n\n\n' )
     # heading()
     sys.exit(0)
 
@@ -129,61 +97,220 @@ def credit():
     warn()
     sys.stdout.write('\n\n'
         + GREEN + ''' Credits ''' + '\n' 
-        + YELLOW + ''' Abhishek Patel [''' + BLUE +''' https://github.com/abhishekpatel946/''' + YELLOW + ''' ] ''' + END + '\n\n' )
+        + YELLOW + ''' Abhishek Patel ''' + WHITE + '''[''' + BLUE +''' https://github.com/abhishekpatel946/''' + WHITE + ''' ] ''' + END + '\n\n' )
     # heading()
     sys.exit(0)
 
 # option;s
 def option():
-     print('\n {0}[{1}1{0}]{1} Add Credential '.format(BLUE, WHITE) + '\n' + ' {0}[{1}2{0}]{1} Show Credential'.format(BLUE, WHITE) + '\n' + ' {0}[{1}3{0}]{1} Delete Credential'.format(BLUE, WHITE) + '\n' + ' {0}[{1}U{0}]{1} Update'.format(BLUE, WHITE) + '\n' + ' {0}[{1}Q{0}]{1} Quit'.format(BLUE, WHITE) + '\n')
+     print('\n {0}[{1}1{0}]{1} Add Credential '.format(BLUE, WHITE) + '\n' + ' {0}[{1}2{0}]{1} Show All Credential'.format(BLUE, WHITE) + '\n' + ' {0}[{1}3{0}]{1} Delete Credential'.format(BLUE, WHITE) + '\n' + ' {0}[{1}4{0}]{1} unHide Credential'.format(BLUE, WHITE) + '\n' + ' {0}[{1}5{0}]{1} Link'.format(BLUE, WHITE) + '\n' + ' {0}[{1}U{0}]{1} Update'.format(BLUE, WHITE) + '\n' + ' {0}[{1}Q{0}]{1} Quit'.format(BLUE, WHITE) + '\n')
+
+# bringing the values from the file
+def file(file_contents):
+    file_value = open('users.txt', 'r+')
+    f = file_value.readlines()
+    for x in f:
+        file_contents.append(x)
+    return file_contents
+
+# matching with the user values
+def auth(file_contents, username, password):
+    uname = str(file_contents[0]).rstrip()
+    upass = str(file_contents[1]).rstrip()
+    if username == uname and password == upass:
+        option()
+        # print('\n {0}WARNING: Enable access to more secure apps on your email account.{2} \n -> * ONLY WORK WITH GMAIL * :\n {1}https://www.google.com/settings/security/{2}'.format(RED, GREEN, END))
+        # print('\n NOTE: Don\'t use your personal email, make a dedicated. \n')
+            
+    else:
+        print(RED + '\t\n INVALID CREDENTIALS ' + END)
+        time.sleep(2)
+        heading()
+
+# generate a key and save it into a file
+def write_key():
+    key = Fernet.generate_key()
+    with open('key.key', 'wb') as key_file:
+        key_file.write(key)
+
+# load the key from the current directory named 'key.key'
+def load_key():
+    return open('key.key', 'rb').read()
+
+# intiaization
+def cryptInitial():
+    # generate and write a new key [executing only once]
+    # write_key()
+    # load the previously generated key
+    global key 
+    key = load_key()
+     # initialize the Fernet class
+    global f 
+    f = Fernet(key)
+
+    return key, f
+
+# Enrypt the data
+def Encryption(data1, data2):
+    # define globally
+    global encrypted_1
+    global encrypted_2
+    cryptInitial()
+    # cipher text
+    data_1 = str(data1).encode()
+    data_2 = str(data2).encode()
+    # enrypt the cipher text
+    encrypted_1 = f.encrypt(data_1)
+    encrypted_2 = f.encrypt(data_2)
+
+    return encrypted_1, encrypted_2
+
+# Decrypt the data
+def Depcryption(data1):
+    #  defines globally
+    global decrypted_1
+    cryptInitial()
+    # decrypt the encrypted text
+    decrypted_1 = f.decrypt(str(data1))
+    # print the value
+    print(decrypted_1)
+
 
 # main funtion
 def main():
     clear()
     warn()
-    input(YELLOW+'''\n\n\nPRESS ['''+WHITE+ '''ENTER'''+YELLOW+'''] TO CONTINUE''' + END )
+    raw_input(YELLOW+'''\n\n\nPRESS ['''+WHITE+ '''ENTER'''+YELLOW+'''] TO CONTINUE''' + END )
     clear()
     heading()
     try:
+
+         # secret data for sheet
+        scope = ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive.file', 'https://www.googleapis.com/auth/drive']
+        creds = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', scope)
+        client = gspread.authorize(creds)
+        sheet = client.open('pySheet').sheet1
+
         while True:
             
-            header = ('{0}abhi{1} > {2}'.format(YELLOW, WHITE, END))
-            choise = input(header)
+            header = ('{0}abhi{1}> {2}'.format(YELLOW, WHITE, END))
+            choise = raw_input(header)
+            
+            # insert credentials
+            if choise == '1':
+                # getting the last row of the sheet
+                list_of_all = sheet.get_all_values()
+                lastRow = len(list_of_all)+1
+                # taking the input form user
+                print('\n {0}Enter the details like:- {1}title, username, password \n'.format(GREEN, WHITE))
+                inputList = list(raw_input().split(' '))
+                # encryption
+                Encryption(inputList[1], inputList[2])
+                # inserting into sheet
+                sheet.insert_row([inputList[0], encrypted_1, encrypted_2], lastRow)
+                # show the option
+                time.sleep(1)
+                option()
+
+            # access credentials [only id;s]
+            if choise == '2':
+                list_of_all = sheet.get_all_values()
+                for value in list_of_all:
+                    print(value[0])  
+                # show the option
+                time.sleep(1)
+                option()
+
+            # delete credentials 
+            if choise == '3':
+                list_of_all = sheet.get_all_values()
+                for value in list_of_all:
+                    print(value[0])  
+                cell_id = raw_input('\n {0}Type the {1}id {0}which you want to delete : {2}'.format(GREEN, WHITE, END))
+                cell_list = sheet.findall(cell_id)
+                for cell in cell_list:
+                   cell_row = cell.row
+                # delete that row which is selected by the user
+                sheet.delete_row(cell_row)
+                # show the option
+                time.sleep(1)
+                option()
+
+            # visible the encrypted credential;s
+            if choise == '4':
+                list_of_all = sheet.get_all_values()
+                for value in list_of_all:
+                    print(value[0])  
+                cell_id = raw_input('\n {0}Type the {1}id {0}which you want to show : {2}'.format(GREEN, WHITE, END))
+                print('')
+                cell_list = sheet.findall(cell_id)
+                for cell in cell_list:
+                   cell_row = cell.row
+                # get the data
+                for i in range(1,4):
+                    # print(sheet.cell(cell_row, i).value)
+                    if i==1:
+                        print(sheet.cell(cell_row, i).value)
+                    else:
+                        Depcryption(sheet.cell(cell_row, i).value)
+                # to show the option
+                option()
+
+            # pySheet link
+            if choise == '5': 
+                print(GREEN + '\n https://docs.google.com/spreadsheets/u/0/d/1oFjNyhuPtjUex2YTMuYY8oWm6n2o_EW3G_iw86prOqk/edit' + END)
+                option()
 
             if choise.upper() == 'Q' or choise.upper() == 'QUIT':
                 clear()
                 pp()
+                time.sleep(1)
                 raise SystemExit
             
+            # login section
             if choise == 'L' or choise.upper() == 'L':
-                option()
-                print('\n {0}WARNING: Enable access to more secure apps on your email account.{2} \n -> * ONLY WORK WITH GMAIL * :\n {1}https://www.google.com/settings/security/{2}'.format(RED, GREEN, END))
-                print('\n NOTE: Don\'t use your personal email, make a dedicated. \n')
-            
+                username = raw_input(GREEN + '\nUsername: ' + END)
+                password = getpass.getpass(GREEN + 'Password: ' + END)
+
+                auth(file_contents, username, password)
+           
+           # about section
             if choise ==  'A' or choise.upper() == 'A':
                 heading()
                 about()
-            
+                # warn()
+           
+            # credit section
             if choise == 'C' or choise.upper() == 'C':
                 heading()
                 credit()
+                # warn()
 
-            if choise == 'U' or choise.upper() == 'UPPER':
+            # update the script from GIT
+            if choise == 'u' or choise == 'U' or choise.upper() == 'UPPER':
                 os.system('python3 updater.py')
-
+            
+            # exit
             if choise.upper() == 'EXIT' or choise.upper() == 'CLOSE':
                 clear()
                 pp()
+                time.sleep(1)
                 raise SystemExit
 
-
-
+    # Exception occurs
     except KeyboardInterrupt:
         clear()
         pp()
+        time.sleep(1)
         sys.exit(0)
 
 
 # i like this function 
 if __name__ == "__main__":
+
+    # RW on file
+    file_contents = []
+    file(file_contents)
+
+    # execute the main()
     main()
