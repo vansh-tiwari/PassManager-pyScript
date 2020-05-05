@@ -1,3 +1,5 @@
-'data/client_secret.json',
-'data/key.key',
-'data/users.txt',
+# ignore all .key files
+*.key
+
+#ignore the json file
+*.json 
