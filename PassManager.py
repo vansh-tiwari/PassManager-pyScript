@@ -107,7 +107,7 @@ def option():
 
 # bringing the values from the file
 def file(file_contents):
-    file_value = open('users.txt', 'r+')
+    file_value = open('data/users.txt', 'r+')
     f = file_value.readlines()
     for x in f:
         file_contents.append(x)
@@ -119,9 +119,7 @@ def auth(file_contents, username, password):
     upass = str(file_contents[1]).rstrip()
     if username == uname and password == upass:
         option()
-        # print('\n {0}WARNING: Enable access to more secure apps on your email account.{2} \n -> * ONLY WORK WITH GMAIL * :\n {1}https://www.google.com/settings/security/{2}'.format(RED, GREEN, END))
-        # print('\n NOTE: Don\'t use your personal email, make a dedicated. \n')
-            
+        
     else:
         print(RED + '\t\n INVALID CREDENTIALS ' + END)
         time.sleep(2)
@@ -130,12 +128,12 @@ def auth(file_contents, username, password):
 # generate a key and save it into a file
 def write_key():
     key = Fernet.generate_key()
-    with open('key.key', 'wb') as key_file:
+    with open('data/key.key', 'wb') as key_file:
         key_file.write(key)
 
 # load the key from the current directory named 'key.key'
 def load_key():
-    return open('key.key', 'rb').read()
+    return open('data/key.key', 'rb').read()
 
 # intiaization
 def cryptInitial():
@@ -187,7 +185,7 @@ def main():
 
          # secret data for sheet
         scope = ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive.file', 'https://www.googleapis.com/auth/drive']
-        creds = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', scope)
+        creds = ServiceAccountCredentials.from_json_keyfile_name('data/client_secret.json', scope)
         client = gspread.authorize(creds)
         sheet = client.open('pySheet').sheet1
 
