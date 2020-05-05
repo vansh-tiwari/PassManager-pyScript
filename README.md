@@ -1,4 +1,4 @@
-# PassManager
+# PassManager-pyScript
 
 Copyright 2020 PassManager
 Written by: * **Abhishek Patel** - (https://github.com/abhishekpatel946)
@@ -9,7 +9,7 @@ TOOL DESIGNED TO SAVES YOUR ALL PASSWORD SECURELY USING ENCRYPTION
 
 ### Cloning:
 ```
-git clone https://github.com/abhishekpatel946/PassManager.git
+git clone https://github.com/abhishekpatel946/PassManager-pyScript.git
 ```
 
 ### Running:
