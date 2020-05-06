@@ -13,7 +13,7 @@ def update_client_version(version):
 
 def main():
     # here is a some issue <URL> with the raw file.[version.txt]
-    url = 'https://raw.githubusercontent.com/abhishekpatel946/PassManager_pyScript/master/version.txt?token=AK7JOVWZJWJZROHXEWES7EC6V2F6K'
+    url = 'https://raw.githubusercontent.com/abhishekpatel946/PassManager-pyScript/master/version.txt'
     r = requests.get(url)
     version = r.text
     print(version)

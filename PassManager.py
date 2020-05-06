@@ -81,11 +81,13 @@ def about():
     sys.stdout.write('\n'
         + YELLOW + '''
             PassManager is a simple pyScript that store your all Credentials & Passwords on 
-            google as a ENCRYPTED file. So no one can find decrypt easily and it's stores online
-            on your account that's why nobody can find out that decrypted file.
-
-            PassManager is simple add delete CREDENTIALs easily with my pyScript.
-            It's a open source script you can contribute and donate for help. '''
+            google as a ENCRYPTED file such that no one can access or Decrypt your CREDENTIALS.
+	    On saving passwords, it gets stored on your Google account.
+            It is quite simple to add delete & search CREDENTIALs easily with PassManager.
+            It is a open source python script.  
+	    
+            You can contribute to this script & donate for help.	
+	'''
         + BLUE + 
         '\n\t\t\t' + ''' https://github.com/abhishekpatel946/ ''' + END + '\n\n\n' )
     # heading()
