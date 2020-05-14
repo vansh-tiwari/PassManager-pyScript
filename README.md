@@ -3,9 +3,9 @@
 Copyright 2020 PassManager
 Written by: * **Abhishek Patel** - (https://github.com/abhishekpatel946)
 
-TOOL DESIGNED TO SAVE ALL YOUR PASSWORDS & CREDENTIALS SECURELY USIGN CRYPTOGRAPHY.
+TOOL DESIGNED TO SAVE ALL YOUR PASSWORDS & CREDENTIALS SECURELY USING CRYPTOGRAPHY.
 
-**Only download it here. Not available on other platforms. It's a open source you can download the code and modify at your side. .**
+**Only download it from here. Not available on other platforms. It's a open source you can download the code and modify at your side. .**
 
 ### Cloning:
 ```
